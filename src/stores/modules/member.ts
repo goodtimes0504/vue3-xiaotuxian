@@ -27,6 +27,17 @@ export const useMemberStore = defineStore(
   },
   // TODO: 持久化
   {
-    persist: true,
+    //网页端可以这么配置，小程序端不行
+    // persist: true,
+    persist: {
+      storage:{
+        getItem(key) {
+          return uni.getStorageSync(key)
+        },
+        setItem(key, value) {
+          uni.setStorageSync(key, value)
+        },
+      }
+    }
   },
 )
