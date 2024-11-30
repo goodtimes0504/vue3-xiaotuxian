@@ -37,14 +37,17 @@ onLoad(() => {
 <template>
   <!-- 自定义导航栏 -->
   <CustomNavbar />
-  <!-- 自定义轮播图 -->
-  <XtxSwiper :list="bannerList" />
-  <!-- 分类面板 -->
-  <CategoryPanel :list="categoryList" />
-  <!-- 热门组件 -->
-  <HotPanel :list="hotList" />
-  <!-- 商品列表 -->
-  <view class="index">index</view>
+  <!-- 滚动容器 -->
+  <scroll-view scroll-y class="scroll-view">
+    <!-- 自定义轮播图 -->
+    <XtxSwiper :list="bannerList" />
+    <!-- 分类面板 -->
+    <CategoryPanel :list="categoryList" />
+    <!-- 热门组件 -->
+    <HotPanel :list="hotList" />
+    <!-- 猜你喜欢 -->
+    <XtxGuess />
+  </scroll-view>
 </template>
 
 <style lang="scss">
@@ -52,5 +55,11 @@ onLoad(() => {
 page {
   // background-color:#eceaea
   background-color: #f3f1f1;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.scroll-view {
+  flex: 1;
 }
 </style>

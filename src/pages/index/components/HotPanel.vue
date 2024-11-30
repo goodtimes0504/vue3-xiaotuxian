@@ -43,7 +43,7 @@ defineProps<{
     padding: 24rpx 24rpx 0;
     font-size: 32rpx;
     color: #262626;
-    position: relative;
+    // position: relative;
     .title-desc {
       font-size: 24rpx;
       color: #7f7f7f;
