@@ -30,14 +30,14 @@ export const useMemberStore = defineStore(
     //网页端可以这么配置，小程序端不行
     // persist: true,
     persist: {
-      storage:{
+      storage: {
         getItem(key) {
           return uni.getStorageSync(key)
         },
         setItem(key, value) {
           uni.setStorageSync(key, value)
         },
-      }
-    }
+      },
+    },
   },
 )
