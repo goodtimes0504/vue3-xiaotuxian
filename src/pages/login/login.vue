@@ -2,7 +2,9 @@
 
 <script setup lang="ts">
 import { postLoginWxMinAPI, postLoginWxMinSimpleAPI } from '@/services/login'
+import { useMemberStore } from '@/stores'
 import { onLoad } from '@dcloudio/uni-app'
+import type { LoginResult } from '@/types/member'
 
 //获取code登录凭证
 let code = ''
@@ -16,12 +18,26 @@ const onGetPhoneNumber: UniHelper.ButtonOnGetphonenumber = async (e) => {
   const encryptedData = e.detail!.encryptedData!
   const iv = e.detail!.iv!
   const res = await postLoginWxMinAPI({ code, encryptedData, iv })
+  loginSuccess(res.result)
 }
 //模拟手机号码快捷登录（练习使用）
 const onGetphonenumberSimple = async () => {
   const res = await postLoginWxMinSimpleAPI('18888888888')
+  loginSuccess(res.result)
+}
+//登录成功
+const loginSuccess = (profile: LoginResult) => {
+  //保存会员信息
+  const memberStore = useMemberStore()
+  memberStore.setProfile(profile)
+  //提示登录成功
   uni.showToast({ title: '登录成功', icon: 'success' })
-  console.log(res)
+  //等一会提示 因为switchTab会关闭所有页面
+  // nextTick 是一个异步函数，用于在下一次 DOM 更新循环结束之后执行延迟回调 也可以用在这里
+  setTimeout(() => {
+    //跳转到我的
+    uni.switchTab({ url: '/pages/my/my' })
+  }, 500)
 }
 </script>
 
