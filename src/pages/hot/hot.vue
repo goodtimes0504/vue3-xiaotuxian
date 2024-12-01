@@ -25,12 +25,16 @@ onReady(() => {
 //推荐封面图
 const bannerPicture = ref<string>('')
 //推荐选项
-const subTypes = ref<SubTypeItem[]>([])
+const subTypes = ref<(SubTypeItem & { finish?: boolean })[]>([])
 //高亮下标
 const activeIndex = ref(0)
 //获取热门推荐数据
 const getHotRecommendData = async () => {
-  const res = await getHotRecommendAPI(currentHotMap!.url)
+  const res = await getHotRecommendAPI(currentHotMap!.url, {
+    //技巧 环境变量 开发环境和生产环境的值不一样
+    page: import.meta.env.DEV ? 30 : 1,
+    pageSize: 10,
+  })
   // console.log(res.result.subTypes[0].goodsItems.items[0].id)
   bannerPicture.value = res.result.bannerPicture
   subTypes.value = res.result.subTypes
@@ -42,8 +46,26 @@ onLoad(() => {
 //滚动触底触发函数
 const OnScrolltolower = async () => {
   console.log('触底')
-  //当前页面累加
-  subTypes.value[activeIndex.value].goodsItems.page++
+  //分页条件
+  if (
+    subTypes.value[activeIndex.value].goodsItems.page <
+    subTypes.value[activeIndex.value].goodsItems.pages
+  ) {
+    //当前页面累加
+    subTypes.value[activeIndex.value].goodsItems.page++
+  } else {
+    //没有更多数据
+
+    //标记已结束
+    subTypes.value[activeIndex.value].finish = true
+    //退出并提示
+
+    return uni.showToast({
+      title: '没有更多数据了',
+      icon: 'none',
+    })
+  }
+
   //调用api传参
   const res = await getHotRecommendAPI(currentHotMap!.url, {
     subType: subTypes.value[activeIndex.value].id,
@@ -100,7 +122,7 @@ const OnScrolltolower = async () => {
           </view>
         </navigator>
       </view>
-      <view class="loading-text">正在加载...</view>
+      <view class="loading-text">{{ item.finish ? '没有更多数据了' : '加载中...' }}</view>
     </scroll-view>
   </view>
 </template>
