@@ -23,7 +23,7 @@ onReady(() => {
 //获取热门推荐数据
 const getHotRecommendData = async () => {
   const res = await getHotRecommendAPI(currentHotMap!.url)
-  console.log(res)
+  console.log(res.result.subTypes[0].goodsItems.items[0].id)
 }
 //页面加载时调用
 onLoad(() => {

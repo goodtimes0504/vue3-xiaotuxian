@@ -1,4 +1,5 @@
 import type { PageParams } from '@/types/global'
+import type { HotResult } from '@/types/hot'
 import { http } from '@/utils/http'
 
 //封装一个获取热门推荐的参数的类型
@@ -12,7 +13,7 @@ type HotParams = PageParams & { subType?: string }
  * @returns
  */
 export const getHotRecommendAPI = (url: string, data?: HotParams) => {
-  return http({
+  return http<HotResult>({
     method: 'GET',
     url,
     data,
