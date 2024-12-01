@@ -39,6 +39,23 @@ const getHotRecommendData = async () => {
 onLoad(() => {
   getHotRecommendData()
 })
+//滚动触底触发函数
+const OnScrolltolower = async () => {
+  console.log('触底')
+  //当前页面累加
+  subTypes.value[activeIndex.value].goodsItems.page++
+  //调用api传参
+  const res = await getHotRecommendAPI(currentHotMap!.url, {
+    subType: subTypes.value[activeIndex.value].id,
+    page: subTypes.value[activeIndex.value].goodsItems.page,
+    pageSize: subTypes.value[activeIndex.value].goodsItems.pageSize,
+  })
+  // console.log(res)
+  //数组追加
+  subTypes.value[activeIndex.value].goodsItems.items.push(
+    ...res.result.subTypes[activeIndex.value].goodsItems.items,
+  )
+}
 </script>
 
 <template>
@@ -65,6 +82,7 @@ onLoad(() => {
       v-show="index === activeIndex"
       scroll-y
       class="scroll-view"
+      @scrolltolower="OnScrolltolower"
     >
       <view class="goods">
         <navigator
