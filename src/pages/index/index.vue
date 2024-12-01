@@ -6,9 +6,9 @@ import { getHomeBannerAPI, getHomeCategoryAPI, getHomeHotAPI } from '@/services/
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
 import type { BannerItem, CategoryItem, HotItem } from '@/types/home'
-import type { XtxGuessInstance } from '@/types/component'
 //导入骨架图
 import PageSkeleton from './components/PageSkeleton.vue'
+import { useGuessList } from '@/composables'
 
 //获取轮播图数据
 const bannerList = ref<BannerItem[]>([])
@@ -41,13 +41,15 @@ onLoad(async () => {
 
   isLoading.value = false
 })
-//获取猜你喜欢组件实例
-const guessRef = ref<XtxGuessInstance>()
-//滚动到底部加载更多
-const OnScrollToLower = async () => {
-  console.log('滚动到底部加载更多')
-  guessRef.value?.getMore()
-}
+// //获取猜你喜欢组件实例
+// const guessRef = ref<XtxGuessInstance>()
+// //滚动到底部加载更多
+// const OnScrollToLower = async () => {
+//   console.log('滚动到底部加载更多')
+//   guessRef.value?.getMore()
+// }
+//调用猜你喜欢组合式函数
+const { guessRef, onScrolltolower } = useGuessList()
 //当前下拉刷新状态
 const isTriggered = ref(false)
 //自定义下拉刷新被触发
@@ -80,7 +82,7 @@ const OnRefresherrefresh = async () => {
     refresher-enabled
     @refresherrefresh="OnRefresherrefresh"
     :refresher-triggered="isTriggered"
-    @scrolltolower="OnScrollToLower"
+    @scrolltolower="onScrolltolower"
     scroll-y
     class="scroll-view"
   >

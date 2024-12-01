@@ -9,6 +9,8 @@ const pageParams: Required<PageParams> = {
   page: 31,
   pageSize: 10,
 }
+//加载状态
+const loading = ref(false)
 
 //获取猜你喜欢数据
 const guessList = ref<GuessItem[]>([])
@@ -17,6 +19,11 @@ const finish = ref(false)
 const getHomeGoodsGuessLikeData = async () => {
   //退出判断
   if (finish.value) return uni.showToast({ icon: 'none', title: '没有更多数据' })
+  //节流处理
+  if (loading.value) return
+  //节流标记
+  loading.value = true
+  //获取数据
   const res = await getHomeGoodsGuessLikeAPI(pageParams)
   //数组追加
   guessList.value.push(...res.result.items)
@@ -24,6 +31,8 @@ const getHomeGoodsGuessLikeData = async () => {
   if (pageParams.page < res.result.pages) {
     //数组累加
     pageParams.page++
+    //加载状态重置
+    loading.value = false
   } else {
     //没有更多数据
     finish.value = true
