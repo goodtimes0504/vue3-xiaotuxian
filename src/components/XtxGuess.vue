@@ -7,10 +7,15 @@ const guessList = ref<GuessItem[]>([])
 const getHomeGoodsGuessLikeData = async () => {
   const res = await getHomeGoodsGuessLikeAPI()
   guessList.value = res.result.items
+  console.log(typeof res.result.items[0].price) // 检查数据格式
 }
 //组件挂载完毕时获取数据
 onMounted(() => {
   getHomeGoodsGuessLikeData()
+})
+//暴露方法
+defineExpose({
+  getMore: getHomeGoodsGuessLikeData,
 })
 </script>
 
@@ -30,7 +35,7 @@ onMounted(() => {
       <view class="name">{{ item.name }}</view>
       <view class="price">
         <text class="small">¥</text>
-        <text>{{ item.price.toFixed(2) }}</text>
+        <text>{{ item.price }}</text>
       </view>
     </navigator>
   </view>
