@@ -12,6 +12,11 @@ const profile = ref({} as ProfileDetail)
 const getMemberProfileData = async () => {
   const res = await getMemberProfileAPI()
   profile.value = res.result
+  // if (res.result.fullLocation) {
+  //   const [province, city, county] = res.result.fullLocation.split(' ')
+  //   fullLoactionCode = [province, city, county]
+  //   console.log(fullLoactionCode)
+  // }
 }
 onLoad(() => {
   getMemberProfileData()
@@ -67,7 +72,17 @@ const onBirthdayChange: UniHelper.DatePickerOnChange = (e) => {
   console.log(e.detail.value)
   profile.value.birthday = e.detail.value
 }
+//修改城市
+let fullLoactionCode: [string, string, string] = ['', '', '']
 
+const onFullLocationChange: UniHelper.RegionPickerOnChange = (e) => {
+  // console.log(e.detail)
+  //有code postcode 和value
+  profile.value.fullLocation = e.detail.value.join(' ')
+  //提交后端更新
+  fullLoactionCode = e.detail.code!
+}
+//
 //点击保存提交表单
 const onSubmit = async () => {
   const { nickname, gender, birthday } = profile.value
@@ -75,6 +90,9 @@ const onSubmit = async () => {
     nickname,
     gender,
     birthday,
+    provinceCode: fullLoactionCode[0] || undefined,
+    cityCode: fullLoactionCode[1] || undefined,
+    countyCode: fullLoactionCode[2] || undefined,
   })
   // console.log(profile.value.nickname)
   // console.log(res)
@@ -145,7 +163,12 @@ const onSubmit = async () => {
         </view>
         <view class="form-item">
           <text class="label">城市</text>
-          <picker class="picker" mode="region" :value="profile?.fullLocation?.split(' ')">
+          <picker
+            @change="onFullLocationChange"
+            class="picker"
+            mode="region"
+            :value="profile?.fullLocation?.split(' ')"
+          >
             <view v-if="profile?.fullLocation">{{ profile.fullLocation }}</view>
             <view class="placeholder" v-else>请选择城市</view>
           </picker>
