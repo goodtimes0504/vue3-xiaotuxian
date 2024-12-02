@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getMemberProfileAPI, putMemberProfileAPI } from '@/services/profile'
+import { useMemberStore } from '@/stores'
 import type { ProfileDetail } from '@/types/member'
 import { onLoad } from '@dcloudio/uni-app'
 import { ref } from 'vue'
@@ -15,6 +16,8 @@ const getMemberProfileData = async () => {
 onLoad(() => {
   getMemberProfileData()
 })
+
+const memberStore = useMemberStore()
 //修改头像
 const onAvatarChange = () => {
   uni.chooseMedia({
@@ -36,7 +39,10 @@ const onAvatarChange = () => {
           //上传成功后，更新头像
           if (res.statusCode === 200) {
             const avatar = JSON.parse(res.data).result.avatar
+            //个人信息页的头像更新
             profile.value!.avatar = avatar
+            //全局状态更新
+            memberStore.profile!.avatar = avatar
             uni.showToast({
               title: '上传头像成功',
               icon: 'none',
@@ -59,10 +65,15 @@ const onSubmit = async () => {
   })
   // console.log(profile.value.nickname)
   // console.log(res)
+  //更新store昵称
+  memberStore.profile!.nickname = res.result.nickname
   uni.showToast({
     title: '保存成功',
     icon: 'success',
   })
+  setTimeout(() => {
+    uni.navigateBack()
+  }, 500)
 }
 </script>
 
