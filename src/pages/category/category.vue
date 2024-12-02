@@ -4,7 +4,7 @@ import type { BannerItem } from '@/types/home'
 import { computed, ref } from 'vue'
 import { onLoad } from '@dcloudio/uni-app'
 import { getCategoryTopAPI } from '@/services/category'
-import type { CategoryTopItem } from '@/types/category'
+import type { CategoryTopItem } from '@/types/category.d.ts'
 import PageSkeleton from './components/PageSkeleton.vue'
 
 //获取轮播图数据

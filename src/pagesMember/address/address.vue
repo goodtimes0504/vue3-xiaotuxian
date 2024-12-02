@@ -1,5 +1,20 @@
 <script setup lang="ts">
-//
+import { getMemberAddressListAPI } from '@/services/address'
+import type { AddressItem } from '@/types/address'
+import { onShow } from '@dcloudio/uni-app'
+import { ref } from 'vue'
+
+//获取地址列表函数
+const addressList = ref<AddressItem[]>()
+const getAddressListData = async () => {
+  const res = await getMemberAddressListAPI()
+  // console.log('地址列表', res)
+  addressList.value = res.result
+}
+//初始化调用 此处注意 应该用onShow替代onLoad来加载数据 因为小程序是单页面应用 onLoad只会在页面初始化之后加载一次 如果是从哪个页面返回 onLoad是不会再次触发的 所以要用onShow 来加载 这样在新建或者修改完地址返回之后还会加载最新数据并渲染 这样就不会出现 新建或者修改完地址之后 页面没有刷新的问题
+onShow(() => {
+  getAddressListData()
+})
 </script>
 
 <template>
@@ -9,36 +24,18 @@
       <view v-if="true" class="address">
         <view class="address-list">
           <!-- 收货地址项 -->
-          <view class="item">
+          <view class="item" v-for="item in addressList" :key="item.id">
             <view class="item-content">
               <view class="user">
-                黑马小王子
-                <text class="contact">13111111111</text>
-                <text v-if="true" class="badge">默认</text>
+                {{ item.receiver }}
+                <text class="contact">{{ item.contact }}</text>
+                <text v-if="item.isDefault" class="badge">默认</text>
               </view>
-              <view class="locate">广东省 广州市 天河区 黑马程序员</view>
+              <view class="locate">{{ item.fullLocation }} {{ item.address }}</view>
               <navigator
                 class="edit"
                 hover-class="none"
-                :url="`/pagesMember/address-form/address-form?id=1`"
-              >
-                修改
-              </navigator>
-            </view>
-          </view>
-          <!-- 收货地址项 -->
-          <view class="item">
-            <view class="item-content">
-              <view class="user">
-                黑马小公主
-                <text class="contact">13222222222</text>
-                <text v-if="false" class="badge">默认</text>
-              </view>
-              <view class="locate">北京市 北京市 顺义区 黑马程序员</view>
-              <navigator
-                class="edit"
-                hover-class="none"
-                :url="`/pagesMember/address-form/address-form?id=2`"
+                :url="`/pagesMember/address-form/address-form?id=${item.id}`"
               >
                 修改
               </navigator>

@@ -1,4 +1,4 @@
-import type { CategoryTopItem } from '@/types/category.ts'
+import type { CategoryTopItem } from '@/types/category'
 import { http } from '@/utils/http'
 
 // src/services/category.ts
