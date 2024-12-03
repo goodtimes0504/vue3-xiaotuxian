@@ -94,7 +94,7 @@ const gotoPayment = async () => {
     return uni.showToast({ title: '请选择商品', icon: 'none' })
   }
   //跳转到结算页面
-  uni.navigateTo({ url: '/pages/order/payment/payment' })
+  uni.navigateTo({ url: '/pagesOrder/create/create' })
 }
 </script>
 

@@ -96,7 +96,8 @@ const onCloseSkuPopup = () => {
 const skuPopupRef = ref<SkuPopupInstance>()
 //计算被选中的值
 const selectArrText = computed(() => {
-  return skuPopupRef.value.selectArr.join(' ').trim() || '请选择商品规格'
+  // @ts-ignore
+  return skuPopupRef.value?.selectArr.join(' ').trim() || '请选择商品规格'
 })
 //加入购物车事件函数
 const onAddCart = async (e: SkuPopupEvent) => {
