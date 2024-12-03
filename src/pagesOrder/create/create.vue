@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { getMemberOrderPreAPI } from '@/services/order'
+import { useAddressStore } from '@/stores/modules/address'
 import type { OrderPreResult } from '@/types/order'
 import { onLoad } from '@dcloudio/uni-app'
 import { computed, ref } from 'vue'
@@ -32,6 +33,13 @@ const getMemberOrderPreData = async () => {
 onLoad(() => {
   getMemberOrderPreData()
 })
+//通过计算属性获得默认地址
+const addressStore = useAddressStore()
+const defaultAddress = computed(() => {
+  return (
+    addressStore.selectedAddress || orderPre.value?.userAddresses.find((item) => item.isDefault)
+  )
+})
 </script>
 
 <template>
@@ -40,13 +48,15 @@ onLoad(() => {
     <scroll-view scroll-y class="scroll-view">
       <!-- 收货地址 -->
       <navigator
-        v-if="false"
+        v-if="defaultAddress"
         class="shipment"
         hover-class="none"
         url="/pagesMember/address/address?from=order"
       >
-        <view class="user"> 张三 13333333333 </view>
-        <view class="address"> 广东省 广州市 天河区 黑马程序员3 </view>
+        <view class="user"> {{ defaultAddress.receiver }} {{ defaultAddress.contact }} </view>
+        <view class="address">
+          {{ defaultAddress.fullLocation }} {{ defaultAddress.address }}
+        </view>
         <text class="icon icon-right"></text>
       </navigator>
       <navigator
