@@ -32,7 +32,7 @@ const activeIndex = ref(0)
 const getHotRecommendData = async () => {
   const res = await getHotRecommendAPI(currentHotMap!.url, {
     //技巧 环境变量 开发环境和生产环境的值不一样
-    page: import.meta.env.DEV ? 30 : 1,
+    page: import.meta.env.DEV ? 15 : 1,
     pageSize: 10,
   })
   // console.log(res.result.subTypes[0].goodsItems.items[0].id)
@@ -45,7 +45,7 @@ onLoad(() => {
 })
 //滚动触底触发函数
 const OnScrolltolower = async () => {
-  console.log('触底')
+  // console.log('触底')
   //分页条件
   if (
     subTypes.value[activeIndex.value].goodsItems.page <

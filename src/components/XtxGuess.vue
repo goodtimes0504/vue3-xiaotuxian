@@ -6,7 +6,7 @@ import { onMounted, ref } from 'vue'
 
 //分页参数 用Required<PageParams>将可选参数转成必选
 const pageParams: Required<PageParams> = {
-  page: 31,
+  page: import.meta.env.DEV ? 15 : 1,
   pageSize: 10,
 }
 //加载状态

@@ -36,7 +36,8 @@ const loginSuccess = (profile: LoginResult) => {
   // nextTick 是一个异步函数，用于在下一次 DOM 更新循环结束之后执行延迟回调 也可以用在这里
   setTimeout(() => {
     //跳转到我的
-    uni.switchTab({ url: '/pages/my/my' })
+    // uni.switchTab({ url: '/pages/my/my' })
+    uni.navigateBack()
   }, 500)
 }
 </script>
