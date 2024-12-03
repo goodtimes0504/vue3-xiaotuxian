@@ -22,6 +22,11 @@ onMounted(() => {
 })
 //调用地址store
 const useAddress = useAddressStore()
+//点击切换地址
+// const onChangeSelectedAddress = (item: AddressItem) => {
+//   useAddress.changeSelectedAddress(item)
+//   emit('close')
+// }
 </script>
 
 <template>
