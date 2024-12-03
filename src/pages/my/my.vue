@@ -2,8 +2,7 @@
 
 <script setup lang="ts">
 import { useMemberStore } from '@/stores'
-import { ref } from 'vue'
-import type { XtxGuessInstance } from '@/types/component'
+
 import XtxGuess from '@/components/XtxGuess.vue'
 import { useGuessList } from '@/composables'
 

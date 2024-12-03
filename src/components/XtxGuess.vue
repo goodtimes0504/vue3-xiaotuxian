@@ -6,11 +6,11 @@ import { onMounted, ref } from 'vue'
 
 //分页参数 用Required<PageParams>将可选参数转成必选
 const pageParams: Required<PageParams> = {
-  page: import.meta.env.DEV ? 15 : 1,
+  page: import.meta.env.DEV ? 2 : 1,
   pageSize: 10,
 }
 //加载状态
-const loading = ref(false)
+const isLoading = ref(false)
 
 //获取猜你喜欢数据
 const guessList = ref<GuessItem[]>([])
@@ -20,19 +20,21 @@ const getHomeGoodsGuessLikeData = async () => {
   //退出判断
   if (finish.value) return uni.showToast({ icon: 'none', title: '没有更多数据' })
   //节流处理
-  if (loading.value) return
+  if (isLoading.value) return
   //节流标记
-  loading.value = true
+  isLoading.value = true
   //获取数据
   const res = await getHomeGoodsGuessLikeAPI(pageParams)
   //数组追加
   guessList.value.push(...res.result.items)
+  //节流标记重置
+  isLoading.value = false
+
   //条件判断
   if (pageParams.page < res.result.pages) {
     //数组累加
     pageParams.page++
     //加载状态重置
-    loading.value = false
   } else {
     //没有更多数据
     finish.value = true
